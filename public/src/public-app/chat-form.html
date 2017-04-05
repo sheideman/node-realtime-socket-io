@@ -1,0 +1,80 @@
+<!-- Load the Polymer.Element base class -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<dom-module id="chat-form">
+    <template>
+
+    <!-- Styles MUST be inside template -->
+<style>
+:host {
+   display: block;
+ }
+</style>
+  <input type="text" id="messageText" placeholder="Type message here." value="{{text::input}}"></input>
+  <button id="myButton"> Send</button>
+  <button id="sendLocation">Send Location</button>
+</template>
+    <script>
+        // Extend Polymer.Element base class
+        class ChatForm extends Polymer.Element {
+            static get is() {
+                return 'chat-form'
+            }
+
+            // Declare properties for the element's public API
+            static get properties() {
+                return {
+                    prop: {
+                        type: String,
+                        value: 'This is a Property'
+                    },
+                    messages:{
+                      type:Array,
+                      value:[]
+                    },
+                    message:{
+                      type:Object
+                    },
+                    text:{
+                      type:String
+                    }
+                }
+            }
+            ready() {
+                super.ready();
+
+                this.$.myButton.addEventListener('click', e => {this._handleClick(e)});
+                this.$.sendLocation.addEventListener('click', e => {this._getLocation(e)});
+              }
+            connectedCallback() {
+                super.connectedCallback();
+                console.log(super.connectedCallback())
+            }
+
+            _handleClick() {
+
+        socket.emit('createMessage',{
+          from: 'User',
+          text: this.text
+        });
+        console.log(this.message, this.newMessage);
+        this.$.messageText.value = ''
+      }
+      _getLocation(){
+        if(!navigator.geolocation){
+          return alert('Geolocation not supported by your browser')
+        }
+        navigator.geolocation.getCurrentPosition(function(position){
+       socket.emit('createLocationMessage',{
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+          });
+        }, function(){
+          alert('Unable to fetch location')
+        });
+      }
+
+        }
+        // Register custom element definition using standard platform API
+        customElements.define(ChatForm.is, ChatForm);
+    </script>
+</dom-module>

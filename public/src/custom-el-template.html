@@ -1,0 +1,37 @@
+<!-- Load the Polymer.Element base class -->
+<link rel="import" href="../bower_components/polymer/polymer-element.html">
+<dom-module id="custom-el-template">
+    <template>
+
+    <!-- Styles MUST be inside template -->
+<style>
+:host {
+   display: block;
+}
+</style>
+<h1>[[prop]]</h1>
+</template>
+    <script>
+        // Extend Polymer.Element base class
+        class CustomElTemplate extends Polymer.Element {
+            static get is() {
+                return 'custom-el-template'
+            }
+            // Declare properties for the element's public API
+            static get properties() {
+                return {
+                  prop: {
+                        type: String,
+                        value: 'This is a Property'
+                    }
+                }
+            }
+            connectedCallback() {
+              super.connectedCallback();
+              console.log(super.connectedCallback())
+            }
+        }
+        // Register custom element definition using standard platform API
+        customElements.define(CustomElTemplate.is, CustomElTemplate);
+    </script>
+</dom-module>

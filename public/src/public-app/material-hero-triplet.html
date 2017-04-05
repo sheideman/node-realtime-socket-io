@@ -1,0 +1,117 @@
+
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<dom-module id="material-hero-triplet">
+    <template>
+
+    <!-- Styles MUST be inside template -->
+<style>
+:host {
+   display: block;
+}
+section{
+  display:flex;
+  flex-direction:row;
+  height:100vh;
+}
+main{
+  width:70%;
+  overflow:hidden;
+  background:#333;
+  color:#fff;
+  margin-top:8px;
+  margin-right:4px;
+  margin-bottom:8px;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+}
+main div{
+  background:gold;
+  text-shadow:1px 1px 2px #000;
+  z-index:1;
+  position:absolute;
+  top:150px;
+  left:1em;
+  padding:1em;
+  width:50%;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+}
+aside{
+  flex-direction:column;
+  width:30%;
+justify-content: space-around;
+  color:#fff;
+}
+aside img{
+  object-fit:cover;
+  width:100%;
+  height:auto;
+}
+.card{
+    background:#333;
+    margin-top:8px;
+  margin-left:8px;
+  margin-bottom:0;
+
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+}
+.card h2{
+  padding:8px;
+}
+</style>
+<section>
+  <main>
+    <img src="[[hero._embedded.wp:featuredmedia.0.source_url]]" alt="[[hero.slug]]">
+<div>
+  <h1>[[hero.title.rendered]]</h1>
+  [[hero.excerpt.rendered]]
+</div>
+  </main>
+  <aside>
+    <div class="card">
+      <img src="[[secondary.0._embedded.wp:featuredmedia.0.source_url]]" alt="[[secondary.0.slug]]">
+      <h2>[[secondary.0.title.rendered]]</h2>
+    </div>
+    <div class="card">
+      <img src="[[secondary.1._embedded.wp:featuredmedia.0.source_url]]" alt="[[secondary.0.slug]]">
+      <h2>[[secondary.1.title.rendered]]</h2>
+    </div>
+
+
+  </aside>
+</section>
+
+
+
+ <iron-ajax id="fetchSticky" url="https://mintsocial.com/wp-json/wp/v2/posts?_embed" handle-as="json" on-response="handleSticky" debounce-duration="300"></iron-ajax>
+</template>
+    <script>
+        // Extend Polymer.Element base class
+        class MaterialHeroTriplet extends Polymer.Element {
+            static get is() {
+                return 'material-hero-triplet'
+            }
+            // Declare properties for the element's public API
+            static get properties() {
+                return {
+                    hero: {
+                        type: Object
+                    },
+                    secondary:{
+                      type:Array
+                    }
+                }
+            }
+            connectedCallback() {
+              super.connectedCallback();
+              this.$.fetchSticky.generateRequest();
+            }
+            handleSticky(data){
+              this.set('hero', data.detail.response[0])
+              this.set('secondary', data.detail.response.slice(1,3))
+              console.log('hero',this.hero,'secondary',this.secondary);
+            }
+        }
+        // Register custom element definition using standard platform API
+        customElements.define(MaterialHeroTriplet.is, MaterialHeroTriplet);
+    </script>
+</dom-module>
