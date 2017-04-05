@@ -6,5 +6,10 @@ socket.on('connect', function (){
 socket.on('newMessage', function(message){
   console.log('New Message', message);
   var el = document.getElementById('messageArray')
-  el.insertAdjacentHTML('beforeend',`<li>${message.text}</li>`); 
+  el.insertAdjacentHTML('beforeend',`<li>${message.text}</li>`);
+});
+socket.on('newLocationMessage', function(message){
+  console.log('New Message', message);
+  var el = document.getElementById('messageArray')
+  el.insertAdjacentHTML('beforeend',`<li>${message.from}: <a target="_blank" href=${message.url}>My Location </a></li>`);
 });
