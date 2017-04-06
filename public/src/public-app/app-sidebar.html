@@ -1,21 +1,26 @@
 <!-- Load the Polymer.Element base class -->
-<link rel="import" href="../bower_components/polymer/polymer-element.html">
-<dom-module id="custom-el-template">
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+<dom-module id="app-sidebar">
     <template>
 
     <!-- Styles MUST be inside template -->
 <style>
 :host {
    display: block;
+   background:rebeccapurple;
+   color:#fff;
+   height:100vh;
 }
 </style>
-<h1>[[prop]]</h1>
+<h3>[[prop]]</h3>
+
 </template>
     <script>
         // Extend Polymer.Element base class
-        class CustomElTemplate extends Polymer.Element {
+        class AppSidebar extends Polymer.Element {
             static get is() {
-                return 'custom-el-template'
+                return 'app-sidebar'
             }
             // Declare properties for the element's public API
             static get properties() {
@@ -28,16 +33,9 @@
             }
             connectedCallback() {
               super.connectedCallback();
-              console.log('hello from connected callback')
-            }
-            disconnectedCallback(){
-              console.log('hello from disconnected callback')
-            }
-            attributeChangedCallback(){
-              console.log('hello from attribute changed callback')
             }
         }
         // Register custom element definition using standard platform API
-        customElements.define(CustomElTemplate.is, CustomElTemplate);
+        customElements.define(AppSidebar.is, AppSidebar);
     </script>
 </dom-module>

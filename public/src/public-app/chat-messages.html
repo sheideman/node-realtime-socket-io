@@ -1,0 +1,87 @@
+<!-- Load the Polymer.Element base class -->
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+<dom-module id="chat-messages">
+    <template>
+
+    <!-- Styles MUST be inside template -->
+<style include="shared-styles">
+:host {
+   display: block;
+   height:80vh;
+}
+</style>
+<h1>[[prop]]</h1>
+<template is="dom-repeat" items="{{messages}}"><p>{{item.from}}: {{item.createdAt}} {{item.text}} <a href="{{item.url}}">{{item.url}}</a></p></template>
+</template>
+    <script>
+        // Extend Polymer.Element base class
+        class ChatMessages extends Polymer.Element {
+            static get is() {
+                return 'chat-messages'
+            }
+            // Declare properties for the element's public API
+            static get properties() {
+                return {
+                  prop: {
+                        type: String,
+                        value: 'Chat Messages'
+                    },
+                    messages: {
+                      type:Array,
+                      value:[],
+                      observer: '_updateMessagesList'
+                    }
+                }
+            }
+            ready() {
+                super.ready();
+                var self = this;
+                console.log(socket)
+                socket.on('newMessage', function(message){
+                    var formattedTime = moment(message.createdAt).format('h:mm a');
+                                          var messageBody = {
+                                            from: message.from,
+                                            text: message.text,
+                                            createdAt: formattedTime
+                                          }
+                                          self.push('messages', messageBody);
+                                          console.log(messageBody)
+                                          console.log(self.messages)
+                                          self._updateMessagesList()
+
+                  });
+                  socket.on('newLocationMessage', function(message){
+                    var formattedTime = moment(message.createdAt).format('h:mm a');
+                      var locationMessageBody = {
+                        from: message.from,
+                        url: message.url,
+                        createdAt: formattedTime
+                      }
+                      self.push('messages', locationMessageBody);
+                      self._updateMessagesList()
+
+                  });
+
+
+              }
+            connectedCallback() {
+              super.connectedCallback();
+              console.log('hello from connected callback')
+            }
+            disconnectedCallback(){
+              console.log('hello from disconnected callback')
+            }
+            attributeChangedCallback(){
+              console.log('hello from attribute changed callback')
+            }
+            _updateMessagesList(){
+              console.log(this.messages)
+              this.notifyPath('messages*');
+            }
+
+        }
+        // Register custom element definition using standard platform API
+        customElements.define(ChatMessages.is, ChatMessages);
+    </script>
+</dom-module>

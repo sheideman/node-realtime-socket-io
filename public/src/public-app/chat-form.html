@@ -1,17 +1,25 @@
 <!-- Load the Polymer.Element base class -->
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="shared-styles.html">
+
 <dom-module id="chat-form">
     <template>
 
     <!-- Styles MUST be inside template -->
-<style>
+<style include="shared-styles">
 :host {
    display: block;
+   position:fixed;
+   bottom:0;
+   background:#eee;
  }
+
 </style>
-  <input type="text" id="messageText" placeholder="Type message here." value="{{text::input}}"></input>
-  <button id="myButton"> Send</button>
-  <button id="sendLocation">Send Location</button>
+  <input class="u-full-width" type="text" id="messageText" placeholder="Type message here." value="{{text::input}}"></input>
+  <button class="button-primary" id="myButton"> Send</button>
+  <button class="button" id="sendLocation">Send Location</button>
+</div>
+
 </template>
     <script>
         // Extend Polymer.Element base class
@@ -41,22 +49,20 @@
             }
             ready() {
                 super.ready();
-
                 this.$.myButton.addEventListener('click', e => {this._handleClick(e)});
                 this.$.sendLocation.addEventListener('click', e => {this._getLocation(e)});
               }
             connectedCallback() {
                 super.connectedCallback();
-                console.log(super.connectedCallback())
+
             }
 
             _handleClick() {
 
-        socket.emit('createMessage',{
+      socket.emit('createMessage',{
           from: 'User',
           text: this.text
         });
-        console.log(this.message, this.newMessage);
         this.$.messageText.value = ''
       }
       _getLocation(){

@@ -1,6 +1,7 @@
 <!-- Load the Polymer.Element base class -->
 <link rel="import" href="../bower_components/polymer/polymer-element.html">
-<dom-module id="custom-el-template">
+<link rel="import" href="redux-store.html">
+<dom-module id="redux-el">
     <template>
 
     <!-- Styles MUST be inside template -->
@@ -13,9 +14,9 @@
 </template>
     <script>
         // Extend Polymer.Element base class
-        class CustomElTemplate extends Polymer.Element {
+        class ReduxEl extends Polymer.mixinBehaviors([MyBehavior, MyBehavior2],  Polymer.Element) {
             static get is() {
-                return 'custom-el-template'
+                return 'redux-el'
             }
             // Declare properties for the element's public API
             static get properties() {
@@ -26,6 +27,7 @@
                     }
                 }
             }
+
             connectedCallback() {
               super.connectedCallback();
               console.log('hello from connected callback')
@@ -38,6 +40,6 @@
             }
         }
         // Register custom element definition using standard platform API
-        customElements.define(CustomElTemplate.is, CustomElTemplate);
+        customElements.define(ReduxEl.is, ReduxEl);
     </script>
 </dom-module>

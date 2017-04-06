@@ -1,21 +1,35 @@
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/iron-ajax/iron-ajax.html">
+<link rel="import" href="shared-styles.html">
 <link rel="import" href="chat-form.html">
+<link rel="import" href="app-sidebar.html">
+<link rel="import" href="chat-messages.html">
 <dom-module id="public-app">
   <template>
-    <style>
+    <style include="shared-styles">
       :host {
         display: block;
       }
     </style>
-    <h2>Hello [[prop1]]</h2>
-    <chat-form></chat-form>
-  </template>
+    <div class="row">
+    <app-sidebar class="two columns"></app-sidebar>
+    <div class="ten columns">
+      <chat-messages></chat-messages>
+          <chat-form></chat-form>
+      </div>
 
+
+    </div>
+
+  </div>
+  </template>
+  <script src="/socket.io/socket.io.js"></script>
+<script src="/js/libs/moment.js"></script>
+  <script src="/js/index.js"></script>
   <script>
     class MyApplication extends Polymer.Element {
       static get is() { return 'public-app'; }
-  
+
       static get properties() {
         return {
           prop1: {
@@ -23,6 +37,9 @@
             value: 'public-app'
           }
         };
+      }
+      ready() {
+          super.ready();
       }
     }
 
